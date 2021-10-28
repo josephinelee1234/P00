@@ -6,4 +6,7 @@ P00 -- Cafe of Stories | Design Doc
 Everyone -- 2021-10-27 23:03PM
 We collaborated on making our first design document.
 
-[name] -- 2021-10-28 [time]
+Josephine Lee, Annabel Zhang -- 2021-10-28 19:41PM
+
+We updated the design document after we received feedback that it was unclear how the story itself would be stored.
+In class, our team decided to change the table of stories so that we store the data on the story instead of the link to the story. We will no longer have a separate link for each story.

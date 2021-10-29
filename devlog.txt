@@ -14,3 +14,7 @@ In class, our team decided to change the table of stories so that we store the d
 hanZ -- 2021-10-29 09:02AM
 
 Added our k15 flask app as our "working site"
+
+josephineL -- 2021-10-29 09:20AM
+
+Updated and added new design wiki document

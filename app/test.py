@@ -23,8 +23,18 @@ def randomString():
     key = ''.join(random.choice(chars) for i in range(15))
     return key
 
+def getValue(value, table): #gets all of a certain value from db table
+    list = []
+    query = 'SELECT ' + value + ' FROM ' + table
+    c.execute(query)
+    rows = c.fetchall() #fetches results of query
+    for row in rows:
+        list.append(row)
+    return list
+
+
 def checkLogin(user,password):
-    
+    users = 
 
 
 app = Flask(__name__)    #create Flask object

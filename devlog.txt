@@ -7,14 +7,14 @@ annabelZ -- 2021-10-27 23:03PM
 Everyone collaborated on making our first design document.
 
 josephineL -- 2021-10-28 19:41PM
-
 Me and Annabel updated the design document after we received feedback that it was unclear how the story itself would be stored.
 In class, our team decided to change the table of stories so that we store the data on the story instead of the link to the story. We will no longer have a separate link for each story.
 
 hanZ -- 2021-10-29 09:02AM
-
 Added our k15 flask app as our "working site"
 
 josephineL -- 2021-10-29 09:20AM
-
 Updated and added new design wiki document
+
+annabelZ -- 2021-10-30 12:35PM
+Added run statement to __init__.py to successfully open the site

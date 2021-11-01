@@ -32,17 +32,22 @@ def getValue(value, table): #gets all of a certain value from db table
         list.append(row)
     return list
 
-def checkLogin(user,passwd):
+def checkLogin(user,passwd):  
     userList = getValue(username,users)    #gets username from users table
     passList = getValue(password,users)    #gets passwords from users table
     if user in userList:                   #checks if inputted user is in database
         index = userList.index(user)
         if passwd == passList[index]:          
-            return True     #correct log in
+            return True     #correct log in     Boolean is temporary, will replace with return template.
         else:
             return False    #wrong password
     else:
         return False        #user not in database
+
+def createUser(user,passwd):
+    c.execute("CREATE TABLE IF NOT EXISTS uesrs(username TEXT, password TEXT") #creates table if one does not exist
+    query = 'INSERT INTO users VALUES (\"' + user + '\",\"' + passwd + '\")'
+    c.execute(query)
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = randomString()   #set flask session secret key

@@ -16,18 +16,21 @@ Hebe Huang: Database generation
 git clone <ssh link>
 ```
 
-### 2. Create a virtual enviroment:
+### 2. Create and activate a virtual enviroment:
 ```
-python3 -m venv ~/virtualenvname
+python3 -m venv ~/virtualenvname <br>
+source ~/virtualenvname/bin/activate (for linux)
+source ~/virtualenvname/Scripts/activate (for Windows)
 ```
 
 ### 3. Install dependencies:
 ```
-pip freeze > requirement.txt
+pip install -r requirements.txt  
 ```
 
 ### 4. Navigate to the directory and run:
 ```
+cd P00
 python3 app.py
 ```
 

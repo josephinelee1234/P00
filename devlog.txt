@@ -16,6 +16,9 @@ Added our k15 flask app as our "working site"
 josephineL -- 2021-10-29 09:20
 Updated and added new design wiki document
 
+hebeH -- 2021-10-29 09:20
+Added team info and launch codes in README
+
 annabelZ -- 2021-10-30 12:35
 Added run statement to __init__.py to successfully open the site
 

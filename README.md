@@ -18,8 +18,9 @@ git clone <ssh link>
 
 ### 2. Create and activate a virtual enviroment:
 ```
-python3 -m venv ~/virtualenvname <br>
-source ~/virtualenvname/bin/activate (for linux)
+python3 -m venv ~/virtualenvname
+
+source ~/virtualenvname/bin/activate (for Linux)
 source ~/virtualenvname/Scripts/activate (for Windows)
 ```
 

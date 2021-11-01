@@ -3,18 +3,26 @@ SoftDev
 P00 -- Cafe of Stories | Design Doc
 2021-10-27
 
-annabelZ -- 2021-10-27 23:03PM
+annabelZ -- 2021-10-27 23:03
 Everyone collaborated on making our first design document.
 
-josephineL -- 2021-10-28 19:41PM
+josephineL -- 2021-10-28 19:41
 Me and Annabel updated the design document after we received feedback that it was unclear how the story itself would be stored.
 In class, our team decided to change the table of stories so that we store the data on the story instead of the link to the story. We will no longer have a separate link for each story.
 
-hanZ -- 2021-10-29 09:02AM
+hanZ -- 2021-10-29 09:02
 Added our k15 flask app as our "working site"
 
-josephineL -- 2021-10-29 09:20AM
+josephineL -- 2021-10-29 09:20
 Updated and added new design wiki document
 
-annabelZ -- 2021-10-30 12:35PM
+annabelZ -- 2021-10-30 12:35
 Added run statement to __init__.py to successfully open the site
+
+hebeH -- 2021-10-31 18:00
+
+Made team flag.
+
+josephineL, annabelZ, hebeH -- 2021-11-01 09:12
+
+Configured requirements.txt and updated launch codes

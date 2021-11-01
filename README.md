@@ -21,9 +21,9 @@ git clone <ssh link>
 python3 -m venv ~/virtualenvname
 ```
 
-### 3. Install flask:
+### 3. Install dependencies:
 ```
-pip3 install flask
+pip freeze > requirement.txt
 ```
 
 ### 4. Navigate to the directory and run:

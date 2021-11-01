@@ -32,10 +32,17 @@ def getValue(value, table): #gets all of a certain value from db table
         list.append(row)
     return list
 
-
-def checkLogin(user,password):
-    users = 
-
+def checkLogin(user,passwd):
+    userList = getValue(username,users)    #gets username from users table
+    passList = getValue(password,users)    #gets passwords from users table
+    if user in userList:                   #checks if inputted user is in database
+        index = userList.index(user)
+        if passwd == passList[index]:          
+            return True     #correct log in
+        else:
+            return False    #wrong password
+    else:
+        return False        #user not in database
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = randomString()   #set flask session secret key

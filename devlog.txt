@@ -26,3 +26,7 @@ Made team flag.
 josephineL, annabelZ, hebeH -- 2021-11-01 09:12
 
 Configured requirements.txt and updated launch codes
+
+hanZ -- 2021-11-1 09:13
+
+Made functions for user login/signup connecting to our sqlite3 database.

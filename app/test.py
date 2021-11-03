@@ -58,8 +58,8 @@ def disp_signup_page():
 
     return render_template( 'login.html' )
 
-@app.route("/auth", methods=['GET', 'POST'])
-def authenticate():
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
     if 'currentuser' in session: #checks if user has session
             return render_template('response.html', method = session['currentmethod'], user = session['currentuser'])
     
@@ -76,8 +76,8 @@ def authenticate():
         createUser(user,pas)    #adds user to database
         return render_template('login.html', status = 'Account successfully created. You may now login.')
 
-@app.route("/signup", methods=['GET', 'POST'])
-def signup():
+@app.route("/auth", methods=['GET', 'POST'])
+def authenticate():
     if 'currentuser' in session: #checks if user has session
             return render_template('response.html', method = session['currentmethod'], user = session['currentuser'])
     

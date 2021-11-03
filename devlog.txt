@@ -37,3 +37,7 @@ Made functions for user login/signup connecting to our sqlite3 database.
 josephineL -- 2021-11-03 09:17
 
 Made sign up button and put titles in html files.
+
+hanZ -- 2021-11-1 11:16
+
+Made signup working. Login still does not work. Signup relation to database needs to check if a username is already in use.

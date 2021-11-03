@@ -14,26 +14,25 @@
   </head>
 
   <body>
+    <h1>
+      {{status}}
+    </h1>
     <h2>
       Cafe of Stories
     </h2>
-
-    <h3>
-      <b> {{status}} </b> <br>
+    
+    <h4>
       Enter your username and password below to proceed
-    </h3>
+    </h4>
     <form action="/auth" method = 'POST'>
       Username: <input type="text" name="username">
       <br>
       Password:  <input type="password" name="password">
       <br>
-      <input type="submit" name="sub1">
+      <button type = "submit" formaction="/auth"> Login </button>
+      <button type = "submit" formaction="/signup"> Signup </button>
     </form>
     <br>
-    <br></br>
-    <form action="/signup">
-      <input type="submit" value="Sign up" />
-  </form>
   </body>
 
 </html>

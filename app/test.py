@@ -66,6 +66,24 @@ def authenticate():
     if request.method == 'POST': #conditional for 'POST' method or 'GET' method
         user = request.form['username']
         pas = request.form['password']
+        
+        createUser(user,pas)    #adds user to database
+        return render_template('login.html', status = 'Account successfully created. You may now login.')
+    else:
+        user = request.args['username']
+        pas = request.args['password']
+        
+        createUser(user,pas)    #adds user to database
+        return render_template('login.html', status = 'Account successfully created. You may now login.')
+
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
+    if 'currentuser' in session: #checks if user has session
+            return render_template('response.html', method = session['currentmethod'], user = session['currentuser'])
+    
+    if request.method == 'POST': #conditional for 'POST' method or 'GET' method
+        user = request.form['username']
+        pas = request.form['password']
         if user == 'user':
             if pas == 'password':
                 session['currentuser'] = user   #creates session if login successful
@@ -87,6 +105,7 @@ def authenticate():
                 return render_template('error.html', type = 'password') #returns password error
         else: 
             return render_template('error.html', type='username') #returns username error
+    
     
     
 @app.route("/logout")

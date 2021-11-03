@@ -34,6 +34,6 @@ hanZ -- 2021-11-1 09:13
 
 Made functions for user login/signup connecting to our sqlite3 database.
 
-hanZ -- 2021-11-3 09:15
+josephineL -- 2021-11-03 09:17
 
-Worked on implementing database connection to flask/html. Still WIP.
+Made sign up button and put titles in html files.

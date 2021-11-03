@@ -33,16 +33,14 @@ def getValue(value, table): #gets all of a certain value from db table
     return list
 
 def checkLogin(user,passwd):  
-    userList = getValue(username,users)    #gets username from users table
-    passList = getValue(password,users)    #gets passwords from users table
+    userList = getValue('username','users')    #gets username from users table
+    passList = getValue('password','users')    #gets passwords from users table
     if user in userList:                   #checks if inputted user is in database
         index = userList.index(user)
         if passwd == passList[index]:          
             return True     #correct log in     Boolean is temporary, will replace with return template.
-        else:
-            return False    #wrong password
-    else:
-        return False        #user not in database
+        
+    return render_template('login.html', status = 'Username or password incorrect')        #user not in database
 
 def createUser(user,passwd):
     c.execute("CREATE TABLE IF NOT EXISTS uesrs(username TEXT, password TEXT") #creates table if one does not exist
@@ -63,13 +61,7 @@ def disp_signup_page():
 @app.route("/auth", methods=['GET', 'POST'])
 def authenticate():
     if 'currentuser' in session: #checks if user has session
-        if session['currentuser'] == 'user': #hardcode to check if user is correct
             return render_template('response.html', method = session['currentmethod'], user = session['currentuser'])
-        else: #returns error page is invalid username
-            return render_template('error.html', type = 'username')
-
-    username = 'user'
-    password = 'password' 
     
     if request.method == 'POST': #conditional for 'POST' method or 'GET' method
         user = request.form['username']

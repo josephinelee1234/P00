@@ -32,7 +32,7 @@ def getValue(value, table): #gets all of a certain value from db table
         list.append(row[0])
     return list
 
-def checkLogin(user,passwd):  
+def checkLogin(user,passwd):  #checks inputted username and password to see if the user can log in for login.html
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     db.commit()                   #saves changes
 
@@ -44,7 +44,7 @@ def checkLogin(user,passwd):
             return True
     return False
 
-def createUser(user,passwd):
+def createUser(user,passwd): #creating a new user for login.html; helper method for signup()
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     query = 'INSERT INTO users VALUES (\"' + user + '\",\"' + passwd + '\")'
     c.execute(query)
@@ -62,7 +62,7 @@ def disp_signup_page():
     return render_template( 'login.html' )
 
 @app.route("/signup", methods=['GET', 'POST'])
-def signup():
+def signup(): #creating a new account for login.html
     if 'currentuser' in session: #checks if user has session
             return render_template('home.html',user = session['currentuser'])
     
@@ -102,7 +102,7 @@ def authenticate():
             return render_template('login.html', status = 'Invalid username or password')
     
 @app.route("/logout")
-def logout():
+def logout(): #logs user out through logout button
     if 'currentuser' in session:
         session.pop('currentuser')
     return render_template('login.html')

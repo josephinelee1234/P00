@@ -48,7 +48,20 @@ def createUser(user,passwd): #creating a new user for login.html; helper method 
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     query = 'INSERT INTO users VALUES (\"' + user + '\",\"' + passwd + '\")'
     c.execute(query)
+
+    query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT)"
+    c.execute(query)
     db.commit()                   #saves changes
+
+def createNewStory(title,content,user):
+    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
+    query = 'INSERT INTO ' + user + ' VALUES (\"' + title + '\')'
+    c.execute(query)
+
+    query = 'INSERT INTO stories VALUES (\"' + title + '\",\"' + content + '\",\"' + content + '\",\"' + user + '\")'
+    c.execute(query)
+
+    db.commit()
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = randomString()   #set flask session secret key

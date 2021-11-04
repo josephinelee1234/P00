@@ -33,14 +33,16 @@ def getValue(value, table): #gets all of a certain value from db table
     return list
 
 def checkLogin(user,passwd):  
+    c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
+    db.commit()                   #saves changes
+
     userList = getValue('username','users')    #gets username from users table
     passList = getValue('password','users')    #gets passwords from users table
     if user in userList:                   #checks if inputted user is in database
         index = userList.index(user)
         if passwd == passList[index]:          
-            return render_template('home.html',user = user)     #correct log in     Boolean is temporary, will replace with return template.
-        
-    return render_template('login.html', status = 'Username or password incorrect')        #user not in database
+            return True
+    return False
 
 def createUser(user,passwd):
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
@@ -86,18 +88,23 @@ def authenticate():
         user = request.form['username']
         pas = request.form['password']
         
-        checkLogin(user,pas)
+        if checkLogin(user,pas):
+            return render_template('home.html', user=user)
+        else:
+            return render_template('login.html', status = 'Invalid username or password')
     else:
         user = request.args['username']
         pas = request.args['password']
         
-        checkLogin(user,pas)
+        if checkLogin(user,pas):
+            return render_template('home.html', user=user)
+        else:
+            return render_template('login.html', status = 'Invalid username or password')
     
 @app.route("/logout")
 def logout():
     if 'currentuser' in session:
         session.pop('currentuser')
-        session.pop('currentmethod')
     return render_template('login.html')
 
     

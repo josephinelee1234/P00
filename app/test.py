@@ -62,7 +62,7 @@ def disp_signup_page():
     return render_template( 'login.html' )
 
 @app.route("/signup", methods=['GET', 'POST'])
-def signup(): #creating a new account for login.html
+def signup():
     if 'currentuser' in session: #checks if user has session
             return render_template('home.html',user = session['currentuser'])
     
@@ -70,14 +70,20 @@ def signup(): #creating a new account for login.html
         user = request.form['username']
         pas = request.form['password']
         
-        createUser(user,pas)    #adds user to database
-        return render_template('login.html', status = 'Account successfully created. You may now login.')
+        if user in getValue('username','users'):
+            return render_template('login.html', status = 'Username already in use.')
+        else:
+            createUser(user,pas)    #adds user to database
+            return render_template('login.html', status = 'Account successfully created. You may now login.')
     else:
         user = request.args['username']
         pas = request.args['password']
         
-        createUser(user,pas)    #adds user to database
-        return render_template('login.html', status = 'Account successfully created. You may now login.')
+        if user in getValue('username','user'):
+            return render_template('login.html', status = 'Username already in use.')
+        else:
+            createUser(user,pas)    #adds user to database
+            return render_template('login.html', status = 'Account successfully created. You may now login.')
 
 @app.route("/auth", methods=['GET', 'POST'])
 def authenticate():

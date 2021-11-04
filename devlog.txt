@@ -49,3 +49,7 @@ Login now works with database.
 josephineL -- 2021-11-04 09:19
 
 Made first draft of createstory.html and added buttons for user home page
+
+hanZ -- 2021-11-04 10:06
+
+Made signup check if username is in use. added createNewStory function.

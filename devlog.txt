@@ -41,3 +41,7 @@ Made sign up button and put titles in html files.
 hanZ -- 2021-11-1 11:16
 
 Made signup working. Login still does not work. Signup relation to database needs to check if a username is already in use.
+
+hanZ -- 2021-11-1 11:16
+
+Login now works with database.

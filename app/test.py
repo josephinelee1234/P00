@@ -101,6 +101,7 @@ def authenticate():
         pas = request.form['password']
 
         if checkLogin(user,pas):
+            session['currentuser'] = user
             return render_template('home.html', user=user)
         else:
             return render_template('login.html', status = 'Invalid username or password')
@@ -109,6 +110,7 @@ def authenticate():
         pas = request.args['password']
 
         if checkLogin(user,pas):
+            session['currentuser'] = user
             return render_template('home.html', user=user)
         else:
             return render_template('login.html', status = 'Invalid username or password')
@@ -123,17 +125,12 @@ def logout(): #logs user out through logout button
 @app.route("/createstory", methods=['GET', 'POST'])
 def createNewStory():
     c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
-    db.commit()
+    db.commit()     #saves changes
 
     if 'currentuser' in session:
-        if request.method == 'POST':
-            t = request.form['title']
-            cont = request.form['content']
-
-            return render_template('createstory.html', user = session['currentuser'])
-
-    else:
-        return render_template('login.html', status = 'Please log in to create a new story.')
+        return render_template('createstory.html', user = session['currentuser'])
+    
+    return render_template('login.html', status = 'Please log in to create a new story.')
 
     
 
@@ -141,7 +138,7 @@ def createNewStory():
 def uploadNewStory():
     title = request.args['title']
     content = request.args['content']
-    query = 'INSERT INTO ' + user + ' VALUES (\"' + title + '\')'
+    query = 'INSERT INTO ' + session['currentuser'] + ' VALUES (\"' + title + '\')'
     c.execute(query)
 
     query = 'INSERT INTO stories VALUES(?,?,?,?)'

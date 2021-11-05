@@ -1,7 +1,7 @@
-# Team Whales: Hebe Huang, Josephine Lee, Han Zhang
+# Team Hot Cocoa: Hebe Huang, Josephine Lee, Annabel Zhang, aHan Zhang
 # SoftDev
-# K15: Sessions Greetings
-# 2021-10-18
+# P00: Cafe of Stories
+# 2021-10-27
 
 from flask import Flask             #facilitate flask webserving
 from flask import render_template   #facilitate jinja templating
@@ -40,7 +40,7 @@ def checkLogin(user,passwd):  #checks inputted username and password to see if t
     passList = getValue('password','users')    #gets passwords from users table
     if user in userList:                   #checks if inputted user is in database
         index = userList.index(user)
-        if passwd == passList[index]:          
+        if passwd == passList[index]:
             return True
     return False
 
@@ -48,12 +48,13 @@ def createUser(user,passwd): #creating a new user for login.html; helper method 
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     query = 'INSERT INTO users VALUES (\"' + user + '\",\"' + passwd + '\")'
     c.execute(query)
-
+'''
     query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT)"
     c.execute(query)
-    db.commit()                   #saves changes
+    db.commit()    '''               #saves changes
 
-
+c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
+db.commit()
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = randomString()   #set flask session secret key
@@ -61,7 +62,7 @@ app.secret_key = randomString()   #set flask session secret key
 @app.route("/", methods=['GET', 'POST'])
 def disp_signup_page():
     if 'currentuser' in session: #checks if user has session
-        return render_template('home.html',user = session['currentuser']) 
+        return render_template('home.html',user = session['currentuser'])
         #This should return home page
 
     return render_template( 'login.html' )
@@ -70,11 +71,11 @@ def disp_signup_page():
 def signup():
     if 'currentuser' in session: #checks if user has session
             return render_template('home.html',user = session['currentuser'])
-    
+
     if request.method == 'POST': #conditional for 'POST' method or 'GET' method
         user = request.form['username']
         pas = request.form['password']
-        
+
         if user in getValue('username','users'):
             return render_template('login.html', status = 'Username already in use.')
         else:
@@ -83,7 +84,7 @@ def signup():
     else:
         user = request.args['username']
         pas = request.args['password']
-        
+
         if user in getValue('username','user'):
             return render_template('login.html', status = 'Username already in use.')
         else:
@@ -94,11 +95,11 @@ def signup():
 def authenticate():
     if 'currentuser' in session: #checks if user has session
             return render_template('home.html', user = session['currentuser'])
-    
+
     if request.method == 'POST': #conditional for 'POST' method or 'GET' method
         user = request.form['username']
         pas = request.form['password']
-        
+
         if checkLogin(user,pas):
             return render_template('home.html', user=user)
         else:
@@ -106,12 +107,12 @@ def authenticate():
     else:
         user = request.args['username']
         pas = request.args['password']
-        
+
         if checkLogin(user,pas):
             return render_template('home.html', user=user)
         else:
             return render_template('login.html', status = 'Invalid username or password')
-    
+
 @app.route("/logout")
 def logout(): #logs user out through logout button
     if 'currentuser' in session:
@@ -123,6 +124,27 @@ def logout(): #logs user out through logout button
 def createNewStory():
     c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
     db.commit()
+
+    if 'currentuser' in session:
+        if request.method == 'POST':
+            t = request.form['title']
+            cont = request.form['content']
+
+        #if 'currentuser' in session:
+            usersList = getValue('currentuser', users)
+            #works = getValue('stories', users)
+            if user in usersList:
+                index = usersList.index(user)
+                #stories = works[index]
+                '''
+                for item in stories:
+                if title == item
+                #return render_template()
+                '''
+
+    else:
+        return render_template('login.html', status = 'Please log in to create a new story.')
+
     return render_template('createstory.html', user = session['currentuser'])
 
 @app.route("/uploadNewStory", methods=['GET', 'POST'])
@@ -136,9 +158,8 @@ def uploadNewStory():
     c.execute(query)
     db.commit()
     return render_template('home.html',user = session['currentuser'])
-    
+
 if __name__ == "__main__": #false if this file imported as module
     #enable debugging, auto-restarting of server when this file is modified
-    app.debug = True 
+    app.debug = True
     app.run()
-

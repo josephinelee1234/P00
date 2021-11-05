@@ -52,5 +52,9 @@ Worked on createNewStory function, divided it into createNewStory and uploadNewS
 annabelZ -- 2021-11-04 23:32  
 Continued createNewStory function, and fixed so Sign Up button does not crash.
 
-hanZ - 2021-11-05 09:10
+hanZ -- 2021-11-05 09:10
 Fixed problem with creating new story, regarding our user sessions not working.
+
+josephineL -- 2021-11-05 09:16
+
+Made first draft of add.html for adding stories; changed Add to story button on home page

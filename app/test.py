@@ -53,15 +53,7 @@ def createUser(user,passwd): #creating a new user for login.html; helper method 
     c.execute(query)
     db.commit()                   #saves changes
 
-def createNewStory(title,content,user):
-    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
-    query = 'INSERT INTO ' + user + ' VALUES (\"' + title + '\')'
-    c.execute(query)
 
-    query = 'INSERT INTO stories VALUES (\"' + title + '\",\"' + content + '\",\"' + content + '\",\"' + user + '\")'
-    c.execute(query)
-
-    db.commit()
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = randomString()   #set flask session secret key
@@ -126,6 +118,24 @@ def logout(): #logs user out through logout button
         session.pop('currentuser')
     return render_template('login.html')
 
+
+@app.route("/createstory", methods=['GET', 'POST'])
+def createNewStory():
+    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
+    db.commit()
+    return render_template('createstory.html', user = session['currentuser'])
+
+@app.route("/uploadNewStory", methods=['GET', 'POST'])
+def uploadNewStory():
+    title = request.args['title']
+    content = request.args['content']
+    query = 'INSERT INTO ' + user + ' VALUES (\"' + title + '\')'
+    c.execute(query)
+
+    query = 'INSERT INTO stories VALUES (\"' + title + '\",\"' + content + '\",\"' + content + '\",\"' + user + '\")'
+    c.execute(query)
+    db.commit()
+    return render_template('home.html',user = session['currentuser'])
     
 if __name__ == "__main__": #false if this file imported as module
     #enable debugging, auto-restarting of server when this file is modified

@@ -130,22 +130,12 @@ def createNewStory():
             t = request.form['title']
             cont = request.form['content']
 
-        #if 'currentuser' in session:
-            usersList = getValue('currentuser', users)
-            #works = getValue('stories', users)
-            if user in usersList:
-                index = usersList.index(user)
-                #stories = works[index]
-                '''
-                for item in stories:
-                if title == item
-                #return render_template()
-                '''
+            return render_template('createstory.html', user = session['currentuser'])
 
     else:
         return render_template('login.html', status = 'Please log in to create a new story.')
 
-    return render_template('createstory.html', user = session['currentuser'])
+    
 
 @app.route("/uploadNewStory", methods=['GET', 'POST'])
 def uploadNewStory():

@@ -48,3 +48,6 @@ Made signup check if username is in use. added createNewStory function.
 
 hebeH -- 2021-11-04 21:24
 Worked on createNewStory function, divided it into createNewStory and uploadNewStory. Passing on user info needs work
+
+annabelZ -- 2021-11-04 23:32  
+Continued createNewStory function, and fixed so Sign Up button does not crash.

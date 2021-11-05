@@ -15,7 +15,7 @@ import string                       #get characters used for random string
 #the conventional way:
 #from flask import Flask, render_template, request
 
-db = sqlite3.connect("chocolate", check_same_thread=False) #open if file exists, otherwise create
+db = sqlite3.connect("chocolate.db", check_same_thread=False) #open if file exists, otherwise create
 c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
 def randomString():
@@ -46,12 +46,12 @@ def checkLogin(user,passwd):  #checks inputted username and password to see if t
 
 def createUser(user,passwd): #creating a new user for login.html; helper method for signup()
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
-    query = 'INSERT INTO users VALUES (\"' + user + '\",\"' + passwd + '\")'
-    c.execute(query)
-'''
+    query = 'INSERT INTO users VALUES(?,?)'
+    c.execute(query,[user,passwd])
+
     query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT)"
     c.execute(query)
-    db.commit()    '''               #saves changes
+    db.commit()                   #saves changes
 
 c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
 db.commit()
@@ -76,7 +76,7 @@ def signup():
         user = request.form['username']
         pas = request.form['password']
 
-        if user in getValue('username','users'):
+        if user in getValue('username','users'):    #checks if user input is in database
             return render_template('login.html', status = 'Username already in use.')
         else:
             createUser(user,pas)    #adds user to database
@@ -85,7 +85,7 @@ def signup():
         user = request.args['username']
         pas = request.args['password']
 
-        if user in getValue('username','user'):
+        if user in getValue('username','user'):     #checks if user input is in database
             return render_template('login.html', status = 'Username already in use.')
         else:
             createUser(user,pas)    #adds user to database
@@ -154,8 +154,8 @@ def uploadNewStory():
     query = 'INSERT INTO ' + user + ' VALUES (\"' + title + '\')'
     c.execute(query)
 
-    query = 'INSERT INTO stories VALUES (\"' + title + '\",\"' + content + '\",\"' + content + '\",\"' + user + '\")'
-    c.execute(query)
+    query = 'INSERT INTO stories VALUES(?,?,?,?)'
+    c.execute(query,[title,content,content,session['currentuser']])
     db.commit()
     return render_template('home.html',user = session['currentuser'])
 

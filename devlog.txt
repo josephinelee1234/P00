@@ -56,5 +56,7 @@ hanZ -- 2021-11-05 09:10
 Fixed problem with creating new story, regarding our user sessions not working.
 
 josephineL -- 2021-11-05 09:16
-
 Made first draft of add.html for adding stories; changed Add to story button on home page
+
+hanZ -- 2021-11-05 10:00
+Fixed creating new story. Program now properly creates the story and adds it to the database.

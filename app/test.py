@@ -132,19 +132,36 @@ def createNewStory():
     
     return render_template('login.html', status = 'Please log in to create a new story.')
 
-    
-
 @app.route("/uploadNewStory", methods=['GET', 'POST'])
 def uploadNewStory():
-    title = request.args['title']
-    content = request.args['content']
-    query = 'INSERT INTO ' + session['currentuser'] + ' VALUES (\"' + title + '\')'
-    c.execute(query)
+    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
+    db.commit()     #saves changes
 
-    query = 'INSERT INTO stories VALUES(?,?,?,?)'
-    c.execute(query,[title,content,content,session['currentuser']])
-    db.commit()
-    return render_template('home.html',user = session['currentuser'])
+    if 'currentuser' in session:                #checks if user is in session
+        title = request.form['title']
+        content = request.form['content']
+
+        query = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
+        c.execute(query,[title])
+
+
+        query = 'INSERT INTO stories VALUES(?,?,?,?)'
+        c.execute(query,[title,content,content,session['currentuser']])
+        db.commit()
+        return render_template('home.html',user = session['currentuser'],status='Story successfully created')
+
+    else:
+        return render_template('login.html', status = 'Please log in to create a new story.')
+
+@app.route("/addToStory", methods=['GET','POST'])
+def addToStory():
+    query = 'SELECT content FROM stories WHERE title = ' + title
+    c.execute(query)
+    current = ''
+    rows = c.fetchall
+    for row in rows:
+        current = current + row[0]          #gets the FULL story from database
+
 
 if __name__ == "__main__": #false if this file imported as module
     #enable debugging, auto-restarting of server when this file is modified

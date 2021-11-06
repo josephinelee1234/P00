@@ -19,11 +19,13 @@ db = sqlite3.connect("chocolate.db", check_same_thread=False) #open if file exis
 c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
 def randomString():
+    ''' Generates a random string of 15 random characters'''
     chars = string.ascii_letters + string.digits + string.punctuation
     key = ''.join(random.choice(chars) for i in range(15))
     return key
 
-def getValue(value, table): #gets all of a certain value from db table
+def getValue(value, table): 
+    ''' Gets all of a certain value from db table '''
     list = []
     query = 'SELECT ' + value + ' FROM ' + table
     c.execute(query)
@@ -32,7 +34,8 @@ def getValue(value, table): #gets all of a certain value from db table
         list.append(row[0])
     return list
 
-def checkLogin(user,passwd):  #checks inputted username and password to see if the user can log in for login.html
+def checkLogin(user,passwd):  
+    ''' Checks inputted username and password to see if the user can log in for login.html '''
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     db.commit()                   #saves changes
 
@@ -44,7 +47,8 @@ def checkLogin(user,passwd):  #checks inputted username and password to see if t
             return True
     return False
 
-def createUser(user,passwd): #creating a new user for login.html; helper method for signup()
+def createUser(user,passwd): 
+    ''' Creates a new user for login.html; helper method for signup() '''
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     query = 'INSERT INTO users VALUES(?,?)'
     c.execute(query,[user,passwd])
@@ -61,6 +65,7 @@ app.secret_key = randomString()   #set flask session secret key
 
 @app.route("/", methods=['GET', 'POST'])
 def disp_signup_page():
+    ''' Displays home page if logged in; otherwise displays login page '''
     if 'currentuser' in session: #checks if user has session
         return render_template('home.html',user = session['currentuser'])
         #This should return home page
@@ -69,6 +74,7 @@ def disp_signup_page():
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
+    ''' Adds new user account to database '''
     if 'currentuser' in session: #checks if user has session
             return render_template('home.html',user = session['currentuser'])
 
@@ -96,6 +102,7 @@ def signup():
 
 @app.route("/auth", methods=['GET', 'POST'])
 def authenticate():
+    ''' Checks user login '''
     if 'currentuser' in session: #checks if user has session
             return render_template('home.html', user = session['currentuser'])
 
@@ -119,7 +126,8 @@ def authenticate():
             return render_template('login.html', status = 'Invalid username or password')
 
 @app.route("/logout")
-def logout(): #logs user out through logout button
+def logout(): 
+    ''' Logs user out through logout button '''
     if 'currentuser' in session:
         session.pop('currentuser')
     return render_template('login.html')
@@ -127,6 +135,7 @@ def logout(): #logs user out through logout button
 
 @app.route("/createstory", methods=['GET', 'POST'])
 def createNewStory():
+    ''' Takes user to a page to input new story info '''
     c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
     db.commit()     #saves changes
 
@@ -137,6 +146,7 @@ def createNewStory():
 
 @app.route("/uploadNewStory", methods=['GET', 'POST'])
 def uploadNewStory():
+    ''' Adds new story from createstory.html to database '''
     c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
     db.commit()     #saves changes
 
@@ -158,6 +168,7 @@ def uploadNewStory():
 
 @app.route("/addToStory", methods=['GET','POST'])
 def addToStory():
+    ''' Adds to existing story '''
     query = 'SELECT content FROM stories WHERE title = ' + title
     c.execute(query)
     current = ''

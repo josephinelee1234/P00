@@ -49,8 +49,8 @@ def createUser(user,passwd): #creating a new user for login.html; helper method 
     query = 'INSERT INTO users VALUES(?,?)'
     c.execute(query,[user,passwd])
 
-    query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT)"
-    c.execute(query)
+    #query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT)"
+    #c.execute(query)
     db.commit()                   #saves changes
 
 c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
@@ -79,8 +79,11 @@ def signup():
         if user in getValue('username','users'):    #checks if user input is in database
             return render_template('login.html', status = 'Username already in use.')
         else:
-            createUser(user,pas)    #adds user to database
-            return render_template('login.html', status = 'Account successfully created. You may now login.')
+            if user != "":
+                createUser(user,pas)    #adds user to database
+                return render_template('login.html', status = 'Account successfully created. You may now login.')
+            else:
+                return render_template('login.html', status = 'No spaces allowed.')
     else:
         user = request.args['username']
         pas = request.args['password']
@@ -129,7 +132,7 @@ def createNewStory():
 
     if 'currentuser' in session:
         return render_template('createstory.html', user = session['currentuser'])
-    
+
     return render_template('login.html', status = 'Please log in to create a new story.')
 
 @app.route("/uploadNewStory", methods=['GET', 'POST'])

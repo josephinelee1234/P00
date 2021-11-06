@@ -49,7 +49,7 @@ Made signup check if username is in use. added createNewStory function.
 hebeH -- 2021-11-04 21:24
 Worked on createNewStory function, divided it into createNewStory and uploadNewStory. Passing on user info needs work
 
-annabelZ -- 2021-11-04 23:32  
+annabelZ -- 2021-11-04 23:32
 Continued createNewStory function, and fixed so Sign Up button does not crash.
 
 hanZ -- 2021-11-05 09:10
@@ -60,3 +60,6 @@ Made first draft of add.html for adding stories; changed Add to story button on 
 
 hanZ -- 2021-11-05 10:00
 Fixed creating new story. Program now properly creates the story and adds it to the database.
+
+annabelZ -- 2021-11-5 22:43
+Added statement to catch blank/space usernames; some combinations of blank passwords still pass through

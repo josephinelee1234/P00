@@ -63,3 +63,6 @@ Fixed creating new story. Program now properly creates the story and adds it to 
 
 annabelZ -- 2021-11-5 22:43
 Added statement to catch blank/space usernames; some combinations of blank passwords still pass through
+
+hebeH -- 2021-11-6 12:24
+Added docstrings to test.py

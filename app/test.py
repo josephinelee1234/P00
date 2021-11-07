@@ -18,6 +18,11 @@ import string                       #get characters used for random string
 db = sqlite3.connect("chocolate.db", check_same_thread=False) #open if file exists, otherwise create
 c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
+# creates necessary tables
+c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
+c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);")
+db.commit()
+
 def randomString():
     ''' Generates a random string of 15 random characters'''
     chars = string.ascii_letters + string.digits + string.punctuation
@@ -57,8 +62,23 @@ def createUser(user,passwd):
     c.execute(query)
     db.commit()                   #saves changes
 
-c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
-db.commit()
+
+def get_user_stories(user):
+    ''' Returns all stories the user contributed to, formatted for home.html'''
+    s = ""
+    titles = getValue("title", user)
+    storiesdb = getValue("title", "stories")
+    i = 0
+    while i < len(titles):
+        s += "story " + str(i) + " title: " + titles[i] + " <br> "
+        # query = "SELECT latest FROM stories WHERE title = " + titles[i]
+        # story = c.fetchall() # fetches latest version of the story from the stories db
+        # for s in story:
+        #     s += s
+        i += 1
+    return s
+
+
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = randomString()   #set flask session secret key
@@ -67,7 +87,7 @@ app.secret_key = randomString()   #set flask session secret key
 def disp_signup_page():
     ''' Displays home page if logged in; otherwise displays login page '''
     if 'currentuser' in session: #checks if user has session
-        return render_template('home.html',user = session['currentuser'])
+        return render_template('home.html', user = session['currentuser'], user_stories = get_user_stories(session['currentuser']))
         #This should return home page
 
     return render_template( 'login.html' )
@@ -76,7 +96,7 @@ def disp_signup_page():
 def signup():
     ''' Adds new user account to database '''
     if 'currentuser' in session: #checks if user has session
-            return render_template('home.html',user = session['currentuser'])
+            return render_template('home.html',user = session['currentuser'], user_stories = get_user_stories(session['currentuser']))
 
     if request.method == 'POST': #conditional for 'POST' method or 'GET' method
         user = request.form['username']
@@ -112,7 +132,7 @@ def authenticate():
 
         if checkLogin(user,pas):
             session['currentuser'] = user
-            return render_template('home.html', user=user)
+            return render_template('home.html', user=user, user_stories = get_user_stories(user))
         else:
             return render_template('login.html', status = 'Invalid username or password')
     else:
@@ -121,7 +141,7 @@ def authenticate():
 
         if checkLogin(user,pas):
             session['currentuser'] = user
-            return render_template('home.html', user=user)
+            return render_template('home.html', user=user, user_stories = get_user_stories(user))
         else:
             return render_template('login.html', status = 'Invalid username or password')
 
@@ -160,7 +180,7 @@ def uploadNewStory():
         c.execute(query,[title,content,content,session['currentuser']])
         c.execute('SELECT * FROM stories;')
         db.commit()
-        return render_template('home.html',user = session['currentuser'],status='Story successfully created')
+        return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
 
     else:
         return render_template('login.html', status = 'Please log in to create a new story.')

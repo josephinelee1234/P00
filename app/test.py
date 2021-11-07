@@ -53,8 +53,8 @@ def createUser(user,passwd):
     query = 'INSERT INTO users VALUES(?,?)'
     c.execute(query,[user,passwd])
 
-    #query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT)"
-    #c.execute(query)
+    query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT);"
+    c.execute(query)
     db.commit()                   #saves changes
 
 c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
@@ -136,7 +136,7 @@ def logout():
 @app.route("/createstory", methods=['GET', 'POST'])
 def createNewStory():
     ''' Takes user to a page to input new story info '''
-    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
+    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);") #creates table if one does not exist
     db.commit()     #saves changes
 
     if 'currentuser' in session:
@@ -147,19 +147,18 @@ def createNewStory():
 @app.route("/uploadNewStory", methods=['GET', 'POST'])
 def uploadNewStory():
     ''' Adds new story from createstory.html to database '''
-    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
+    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);") #creates table if one does not exist
     db.commit()     #saves changes
 
     if 'currentuser' in session:                #checks if user is in session
         title = request.form['title']
         content = request.form['content']
-
         query = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
         c.execute(query,[title])
 
-
-        query = 'INSERT INTO stories VALUES(?,?,?,?)'
+        query = 'INSERT INTO stories VALUES(?,?,?,?);'
         c.execute(query,[title,content,content,session['currentuser']])
+        c.execute('SELECT * FROM stories;')
         db.commit()
         return render_template('home.html',user = session['currentuser'],status='Story successfully created')
 

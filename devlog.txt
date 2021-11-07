@@ -66,3 +66,6 @@ Added statement to catch blank/space usernames; some combinations of blank passw
 
 hebeH -- 2021-11-6 12:24
 Added docstrings to test.py
+
+hebeH -- 2021-11-7 13:31
+Made get_user_stories function to display titles of all stories the user contributed to in home.html; displaying story content and formatting needs work

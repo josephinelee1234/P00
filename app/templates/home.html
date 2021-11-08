@@ -31,6 +31,12 @@
   <form action="/addToStory">
     <input type="submit" value="Add to a story " />
   </form>
+  <br> </br>
+  <form action="/viewStory" method = 'POST'>
+    Enter Story Title to View: <input type="text" name="title">
+      <input type = "submit" value='View Story' />
+  </form>
+
   <h3>My stories</h3>
   {% for value in user_stories %}
     {{value}}

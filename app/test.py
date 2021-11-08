@@ -1,4 +1,4 @@
-# Team Hot Cocoa: Hebe Huang, Josephine Lee, Annabel Zhang, aHan Zhang
+# Team Hot Cocoa: Hebe Huang, Josephine Lee, Annabel Zhang, Han Zhang
 # SoftDev
 # P00: Cafe of Stories
 # 2021-10-27

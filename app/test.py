@@ -208,12 +208,9 @@ def viewStory():
     title = request.form['title']
     query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
     c.execute(query)
-    content = ''
-    rows = c.fetchall()
-    for row in rows:
-        content = content + rows[0]
+    rows = c.fetchall()[0][0]
     
-    return render_template('story.html',title = title, content = content)
+    return render_template('story.html',title = title, content = rows)
     
 
 

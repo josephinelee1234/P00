@@ -69,3 +69,6 @@ Added docstrings to test.py
 
 hebeH -- 2021-11-7 13:31
 Made get_user_stories function to display titles of all stories the user contributed to in home.html; displaying story content and formatting needs work
+
+annabelZ -- 2021-11-8 9:01 
+Added function that checks if a new story has the same title as a previously made story.

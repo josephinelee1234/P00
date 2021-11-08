@@ -81,3 +81,6 @@ Added function that checks if a new story has the same title as a previously mad
 
 hanZ -- 2021-11-08 09:26
 Added viewStory route, have some sqlite errors.
+
+hanZ -- 2021-11-08 09:47
+Fixed viewStory and added view story button

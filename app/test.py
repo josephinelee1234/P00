@@ -189,12 +189,26 @@ def uploadNewStory():
 @app.route("/addToStory", methods=['GET','POST'])
 def addToStory():
     ''' Adds to existing story '''
-    query = 'SELECT content FROM stories WHERE title = ' + title
+    query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
     c.execute(query)
     current = ''
-    rows = c.fetchall
+    rows = c.fetchall()
     for row in rows:
         current = current + row[0]          #gets the FULL story from database
+
+@app.route("/viewStory", methods=['GET','POST'])
+def viewStory():
+    '''Returns latest story content'''
+    title = request.form['title']
+    query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
+    c.execute(query)
+    content = ''
+    rows = c.fetchall()
+    for row in rows:
+        content = content + rows[0]
+    
+    return render_template('story.html',title = title, content = content)
+    
 
 
 if __name__ == "__main__": #false if this file imported as module

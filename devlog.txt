@@ -3,7 +3,7 @@ SoftDev
 P00 -- Cafe of Stories | Design Doc
 2021-10-27
 
-josephineL, hebeH, annabelZ, hanZ-- 2021-10-27 23:03
+josephineL, hebeH, annabelZ, hanZ -- 2021-10-27 23:03
 Everyone collaborated on making our first design document.
 
 josephineL -- 2021-10-28 19:41
@@ -69,6 +69,9 @@ Added docstrings to test.py
 
 hebeH -- 2021-11-07 13:31
 Made get_user_stories function to display titles of all stories the user contributed to in home.html; displaying story content and formatting needs work
+
+hebeH, annabelZ -- 2021-11-08 08:41
+Worked on updateStory and uploadUpdatedStory functions and created updatestory.html for adding to an existing story
 
 hanZ -- 2021-11-08 08:56
 Fixed displaying story titles formatting. Possible additions making each title a link to view the contents of that story.

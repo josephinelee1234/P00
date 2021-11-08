@@ -69,6 +69,7 @@ def get_user_stories(user):
     titles = getValue("title", user)
     storiesdb = getValue("title", "stories")
     i = 0
+    return titles
     while i < len(titles):
         s += "story " + str(i) + " title: " + titles[i] + " <br> "
         # query = "SELECT latest FROM stories WHERE title = " + titles[i]

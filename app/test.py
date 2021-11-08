@@ -29,7 +29,7 @@ def randomString():
     key = ''.join(random.choice(chars) for i in range(15))
     return key
 
-def getValue(value, table): 
+def getValue(value, table):
     ''' Gets all of a certain value from db table '''
     list = []
     query = 'SELECT ' + value + ' FROM ' + table
@@ -39,7 +39,7 @@ def getValue(value, table):
         list.append(row[0])
     return list
 
-def checkLogin(user,passwd):  
+def checkLogin(user,passwd):
     ''' Checks inputted username and password to see if the user can log in for login.html '''
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     db.commit()                   #saves changes
@@ -52,7 +52,7 @@ def checkLogin(user,passwd):
             return True
     return False
 
-def createUser(user,passwd): 
+def createUser(user,passwd):
     ''' Creates a new user for login.html; helper method for signup() '''
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     query = 'INSERT INTO users VALUES(?,?)'
@@ -147,7 +147,7 @@ def authenticate():
             return render_template('login.html', status = 'Invalid username or password')
 
 @app.route("/logout")
-def logout(): 
+def logout():
     ''' Logs user out through logout button '''
     if 'currentuser' in session:
         session.pop('currentuser')
@@ -174,14 +174,20 @@ def uploadNewStory():
     if 'currentuser' in session:                #checks if user is in session
         title = request.form['title']
         content = request.form['content']
-        query = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
-        c.execute(query,[title])
 
-        query = 'INSERT INTO stories VALUES(?,?,?,?);'
-        c.execute(query,[title,content,content,session['currentuser']])
-        c.execute('SELECT * FROM stories;')
-        db.commit()
-        return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
+        '''checks if story title has already been used'''
+        if title in getValue('title','stories'):
+            return render_template('createstory.html', status="Duplicate story title- Please enter a different title.")
+
+        else:
+            query = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
+            c.execute(query,[title])
+
+            query = 'INSERT INTO stories VALUES(?,?,?,?);'
+            c.execute(query,[title,content,content,session['currentuser']])
+            c.execute('SELECT * FROM stories;')
+            db.commit()
+            return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
 
     else:
         return render_template('login.html', status = 'Please log in to create a new story.')

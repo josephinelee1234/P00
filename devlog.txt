@@ -61,14 +61,17 @@ Made first draft of add.html for adding stories; changed Add to story button on 
 hanZ -- 2021-11-05 10:00
 Fixed creating new story. Program now properly creates the story and adds it to the database.
 
-annabelZ -- 2021-11-5 22:43
+annabelZ -- 2021-11-05 22:43
 Added statement to catch blank/space usernames; some combinations of blank passwords still pass through
 
-hebeH -- 2021-11-6 12:24
+hebeH -- 2021-11-06 12:24
 Added docstrings to test.py
 
-hebeH -- 2021-11-7 13:31
+hebeH -- 2021-11-07 13:31
 Made get_user_stories function to display titles of all stories the user contributed to in home.html; displaying story content and formatting needs work
 
-hanZ -- 2021-11-08 08:56
-Fixed displaying story titles formatting. Possible additions making each title a link to view the contents of that story.
+josephineL -- 2021-11-08 08:59  
+Made input box bigger and made it possible for user to add multiple lines in add.html and createstory.html.
+
+annabelZ -- 2021-11-8 9:01
+Added function that checks if a new story has the same title as a previously made story.

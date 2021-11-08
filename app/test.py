@@ -18,12 +18,19 @@ import string                       #get characters used for random string
 db = sqlite3.connect("chocolate.db", check_same_thread=False) #open if file exists, otherwise create
 c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
+# creates necessary tables
+c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
+c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);")
+db.commit()
+
 def randomString():
+    ''' Generates a random string of 15 random characters'''
     chars = string.ascii_letters + string.digits + string.punctuation
     key = ''.join(random.choice(chars) for i in range(15))
     return key
 
-def getValue(value, table): #gets all of a certain value from db table
+def getValue(value, table): 
+    ''' Gets all of a certain value from db table '''
     list = []
     query = 'SELECT ' + value + ' FROM ' + table
     c.execute(query)
@@ -32,7 +39,8 @@ def getValue(value, table): #gets all of a certain value from db table
         list.append(row[0])
     return list
 
-def checkLogin(user,passwd):  #checks inputted username and password to see if the user can log in for login.html
+def checkLogin(user,passwd):  
+    ''' Checks inputted username and password to see if the user can log in for login.html '''
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     db.commit()                   #saves changes
 
@@ -44,33 +52,51 @@ def checkLogin(user,passwd):  #checks inputted username and password to see if t
             return True
     return False
 
-def createUser(user,passwd): #creating a new user for login.html; helper method for signup()
+def createUser(user,passwd): 
+    ''' Creates a new user for login.html; helper method for signup() '''
     c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     query = 'INSERT INTO users VALUES(?,?)'
     c.execute(query,[user,passwd])
 
-    query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT)"
+    query = "CREATE TABLE IF NOT EXISTS " + user + "(title TEXT);"
     c.execute(query)
     db.commit()                   #saves changes
 
-c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
-db.commit()
+
+def get_user_stories(user):
+    ''' Returns all stories the user contributed to, formatted for home.html'''
+    s = ""
+    titles = getValue("title", user)
+    storiesdb = getValue("title", "stories")
+    i = 0
+    while i < len(titles):
+        s += "story " + str(i) + " title: " + titles[i] + " <br> "
+        # query = "SELECT latest FROM stories WHERE title = " + titles[i]
+        # story = c.fetchall() # fetches latest version of the story from the stories db
+        # for s in story:
+        #     s += s
+        i += 1
+    return s
+
+
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = randomString()   #set flask session secret key
 
 @app.route("/", methods=['GET', 'POST'])
 def disp_signup_page():
+    ''' Displays home page if logged in; otherwise displays login page '''
     if 'currentuser' in session: #checks if user has session
-        return render_template('home.html',user = session['currentuser'])
+        return render_template('home.html', user = session['currentuser'], user_stories = get_user_stories(session['currentuser']))
         #This should return home page
 
     return render_template( 'login.html' )
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
+    ''' Adds new user account to database '''
     if 'currentuser' in session: #checks if user has session
-            return render_template('home.html',user = session['currentuser'])
+            return render_template('home.html',user = session['currentuser'], user_stories = get_user_stories(session['currentuser']))
 
     if request.method == 'POST': #conditional for 'POST' method or 'GET' method
         user = request.form['username']
@@ -79,8 +105,11 @@ def signup():
         if user in getValue('username','users'):    #checks if user input is in database
             return render_template('login.html', status = 'Username already in use.')
         else:
-            createUser(user,pas)    #adds user to database
-            return render_template('login.html', status = 'Account successfully created. You may now login.')
+            if user != "":
+                createUser(user,pas)    #adds user to database
+                return render_template('login.html', status = 'Account successfully created. You may now login.')
+            else:
+                return render_template('login.html', status = 'No spaces allowed.')
     else:
         user = request.args['username']
         pas = request.args['password']
@@ -93,6 +122,7 @@ def signup():
 
 @app.route("/auth", methods=['GET', 'POST'])
 def authenticate():
+    ''' Checks user login '''
     if 'currentuser' in session: #checks if user has session
             return render_template('home.html', user = session['currentuser'])
 
@@ -102,7 +132,7 @@ def authenticate():
 
         if checkLogin(user,pas):
             session['currentuser'] = user
-            return render_template('home.html', user=user)
+            return render_template('home.html', user=user, user_stories = get_user_stories(user))
         else:
             return render_template('login.html', status = 'Invalid username or password')
     else:
@@ -111,12 +141,13 @@ def authenticate():
 
         if checkLogin(user,pas):
             session['currentuser'] = user
-            return render_template('home.html', user=user)
+            return render_template('home.html', user=user, user_stories = get_user_stories(user))
         else:
             return render_template('login.html', status = 'Invalid username or password')
 
 @app.route("/logout")
-def logout(): #logs user out through logout button
+def logout(): 
+    ''' Logs user out through logout button '''
     if 'currentuser' in session:
         session.pop('currentuser')
     return render_template('login.html')
@@ -124,37 +155,39 @@ def logout(): #logs user out through logout button
 
 @app.route("/createstory", methods=['GET', 'POST'])
 def createNewStory():
-    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
+    ''' Takes user to a page to input new story info '''
+    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);") #creates table if one does not exist
     db.commit()     #saves changes
 
     if 'currentuser' in session:
         return render_template('createstory.html', user = session['currentuser'])
-    
+
     return render_template('login.html', status = 'Please log in to create a new story.')
 
 @app.route("/uploadNewStory", methods=['GET', 'POST'])
 def uploadNewStory():
-    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT)") #creates table if one does not exist
+    ''' Adds new story from createstory.html to database '''
+    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);") #creates table if one does not exist
     db.commit()     #saves changes
 
     if 'currentuser' in session:                #checks if user is in session
         title = request.form['title']
         content = request.form['content']
-
         query = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
         c.execute(query,[title])
 
-
-        query = 'INSERT INTO stories VALUES(?,?,?,?)'
+        query = 'INSERT INTO stories VALUES(?,?,?,?);'
         c.execute(query,[title,content,content,session['currentuser']])
+        c.execute('SELECT * FROM stories;')
         db.commit()
-        return render_template('home.html',user = session['currentuser'],status='Story successfully created')
+        return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
 
     else:
         return render_template('login.html', status = 'Please log in to create a new story.')
 
 @app.route("/addToStory", methods=['GET','POST'])
 def addToStory():
+    ''' Adds to existing story '''
     query = 'SELECT content FROM stories WHERE title = ' + title
     c.execute(query)
     current = ''

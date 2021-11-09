@@ -87,3 +87,6 @@ Added viewStory route, have some sqlite errors.
 
 hanZ -- 2021-11-08 09:47
 Fixed viewStory and added view story button
+
+hanZ -- 2021-11-09 08:57
+Made viewStory only work for stories the user has contributed to.

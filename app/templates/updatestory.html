@@ -14,16 +14,22 @@
     </head>
 
     <h4>
-        Enter the existing story's title and content that you want to add to the end.
+        Enter the existing story's title you want to add to. You may not add to a story you have already contributed to.
     </h4>
 
     <form action="/auth" method = 'POST'>
         Title: <input type="text" name="title">
         <br>
-        Content:  <br>
-        <textarea id="content" name="content" rows="4" cols="50"></textarea>
-        <br>
-        <button type = "submit" formaction="/uploadUpdatedStory"> Upload existing story </button>
+        <button type = "submit" formaction="/uploadUpdatedStory"> Submit </button>
       </form>
+    
+    <h5>
+        List of Stories:
+    </h5>
+
+    {% for value in stories %}
+        {{value[0]}}
+        <br>
+    {% endfor %}
 
 </html>

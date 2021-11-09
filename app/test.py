@@ -195,7 +195,10 @@ def uploadNewStory():
 @app.route("/addToStory", methods=['GET','POST'])
 def updateStory():
     if 'currentuser' in session:
-        return render_template('updatestory.html', user = session['currentuser'])
+        query = 'SELECT title FROM stories'
+        c.execute(query)
+        rows = c.fetchall()
+        return render_template('updatestory.html', user = session['currentuser'],stories=rows)
 
     return render_template('login.html', status = 'Please log in to update a story.')
 
@@ -222,13 +225,13 @@ def uploadUpdatedStory():
 @app.route("/viewStory", methods=['GET','POST'])
 def viewStory():
     '''Returns latest story content'''
-    title = request.form['title']
-    query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
-    c.execute(query)
-    rows = c.fetchall()[0][0]
-    
     userTitles = get_user_stories(session['currentuser'])
-    if title in userTitles:
+    title = request.form['title']
+    if title in userTitles:     #checks if user has contributed to requested story.
+        query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
+        c.execute(query)
+        rows = c.fetchall()[0][0]
+    
         return render_template('story.html',title = title, content = rows)
     else:
         return render_template('home.html',status='You may only view stories you have contributed to.', user_stories=get_user_stories(session['currentuser']))

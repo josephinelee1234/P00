@@ -214,10 +214,9 @@ def uploadUpdatedStory():
             updatedContent += content
             query = "UPDATE stories SET latest = " + updatedContent + " WHERE title = " + title
             c.execute(query)
-            return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
+            return render_template('home.html',user = session['currentuser'], status='Story successfully updated', user_stories = get_user_stories(session['currentuser']))
         else:
             return render_template('updatestory.html',user = session['currentuser'], status='Story not found', user_stories = get_user_stories(session['currentuser']))
-        return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
     return render_template('login.html', status = 'Please log in to create a new story.')
 
 @app.route("/viewStory", methods=['GET','POST'])

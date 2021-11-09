@@ -170,7 +170,7 @@ def uploadNewStory():
     ''' Adds new story from createstory.html to database '''
     c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);") #creates table if one does not exist
     db.commit()     #saves changes
-
+    
     if 'currentuser' in session:                #checks if user is in session
         title = request.form['title']
         content = request.form['content']
@@ -205,16 +205,24 @@ def updateStory():
 
 @app.route("/addToTitle", methods=['GET', 'POST'])
 def addToTitle():
+    if 'title' in session:      
+        session.pop('title')
+
     if 'currentuser' in session:
         title = request.form['title']
-        if title in get_user_stories(session['currentuser']):
-            return render_template('home.html', status = 'You cannot add to stories you have already contributed to.', user_stories = get_user_stories(session['currentuser']))
+        titleList = getValue('title','stories')
+        if title in titleList:
+            if title in get_user_stories(session['currentuser']):
+                return render_template('home.html', status = 'You cannot add to stories you have already contributed to.', user_stories = get_user_stories(session['currentuser']))
+            else:
+                query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
+                c.execute(query)
+                rows = c.fetchall()
+                content = rows[0]
+                session['title'] = title
+                return render_template('addcontent.html',content = content, title = title)
         else:
-            query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
-            c.execute(query)
-            rows = c.fetchall()
-            content = rows[0]
-            return render_template('addcontent.html',content = content)
+            return render_template('home.html', status = 'Story does not exist.', user_stories = get_user_stories)
     else:
         return render_template('login.html', status = 'Please log in to update a story.')
 
@@ -222,19 +230,18 @@ def addToTitle():
 def uploadUpdatedStory():
     ''' Uploads existing story from updatestory.html to database '''
     if 'currentuser' in session:                #checks if user is in session
-        title = request.form['title']
         content = request.form['content']
-        titleList = getValue(title, "stories")
-        contentList = getValue("latest", "stories")
-        if title in titleList:
-            i = titleList.index(title)
-            updatedContent = contentList[i]
-            updatedContent += content
-            query = "UPDATE stories SET latest = " + updatedContent + " WHERE title = " + title
-            c.execute(query)
-            return render_template('home.html',user = session['currentuser'], status='Story successfully updated', user_stories = get_user_stories(session['currentuser']))
-        else:
-            return render_template('updatestory.html',user = session['currentuser'], status='Story not found', user_stories = get_user_stories(session['currentuser']))
+        title = session['title']
+
+        query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
+        c.execute(query)
+        latest = c.fetchall()
+        updatedContent = latest[0][0] + content
+        query = "UPDATE stories SET latest = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
+        c.execute(query)
+        db.commit()
+        return render_template('home.html',user = session['currentuser'], status='Story successfully updated', user_stories = get_user_stories(session['currentuser']))
+    
     return render_template('login.html', status = 'Please log in to create a new story.')
 
 @app.route("/viewStory", methods=['GET','POST'])

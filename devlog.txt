@@ -95,5 +95,7 @@ hanZ -- 2021-11-09 09:21
 Worked on adding content to a story. User may now enter a story title to add to a story, if they haven't yet. Updating the actual content not implemented yet.
 
 josephineL -- 2021-11-09 09:25
-
 Added home buttons to pages the user accesses after logging in
+
+hanZ -- 2021-11-09 09:21
+Worked on adding content to story. Added content seems to be added, but story is not added to the user's contributions.

@@ -193,14 +193,32 @@ def uploadNewStory():
         return render_template('login.html', status = 'Please log in to create a new story.')
 
 @app.route("/addToStory", methods=['GET','POST'])
-def addToStory():
-    ''' Adds to existing story '''
-    query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
-    c.execute(query)
-    current = ''
-    rows = c.fetchall()
-    for row in rows:
-        current = current + row[0]          #gets the FULL story from database
+def updateStory():
+    if 'currentuser' in session:
+        return render_template('updatestory.html', user = session['currentuser'])
+
+    return render_template('login.html', status = 'Please log in to update a story.')
+
+
+@app.route("/uploadUpdatedStory", methods=['GET', 'POST'])
+def uploadUpdatedStory():
+    ''' Uploads existing story from updatestory.html to database '''
+    if 'currentuser' in session:                #checks if user is in session
+        title = request.form['title']
+        content = request.form['content']
+        titleList = getValue(title, "stories")
+        contentList = getValue("latest", "stories")
+        if title in titleList:
+            i = titleList.index(title)
+            updatedContent = contentList[i]
+            updatedContent += content
+            query = "UPDATE stories SET latest = " + updatedContent + " WHERE title = " + title
+            c.execute(query)
+            return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
+        else:
+            return render_template('updatestory.html',user = session['currentuser'], status='Story not found', user_stories = get_user_stories(session['currentuser']))
+        return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
+    return render_template('login.html', status = 'Please log in to create a new story.')
 
 @app.route("/viewStory", methods=['GET','POST'])
 def viewStory():

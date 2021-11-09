@@ -203,6 +203,21 @@ def updateStory():
     return render_template('login.html', status = 'Please log in to update a story.')
 
 
+@app.route("/addToTitle", methods=['GET', 'POST'])
+def addToTitle():
+    if 'currentuser' in session:
+        title = request.form['title']
+        if title in get_user_stories(session['currentuser']):
+            return render_template('home.html', status = 'You cannot add to stories you have already contributed to.', user_stories = get_user_stories(session['currentuser']))
+        else:
+            query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
+            c.execute(query)
+            rows = c.fetchall()
+            content = rows[0]
+            return render_template('addcontent.html',content = content)
+    else:
+        return render_template('login.html', status = 'Please log in to update a story.')
+
 @app.route("/uploadUpdatedStory", methods=['GET', 'POST'])
 def uploadUpdatedStory():
     ''' Uploads existing story from updatestory.html to database '''

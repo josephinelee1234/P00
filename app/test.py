@@ -227,7 +227,11 @@ def viewStory():
     c.execute(query)
     rows = c.fetchall()[0][0]
     
-    return render_template('story.html',title = title, content = rows)
+    userTitles = get_user_stories(session['currentuser'])
+    if title in userTitles:
+        return render_template('story.html',title = title, content = rows)
+    else:
+        return render_template('home.html',status='You may only view stories you have contributed to.', user_stories=get_user_stories(session['currentuser']))
     
 
 

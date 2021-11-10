@@ -205,6 +205,7 @@ def updateStory():
 
 @app.route("/addToTitle", methods=['GET', 'POST'])
 def addToTitle():
+    ''' Takes in title of a story and determines whether or not user can add to the story '''
     if 'title' in session:
         session.pop('title')
 
@@ -228,7 +229,7 @@ def addToTitle():
 
 @app.route("/uploadUpdatedStory", methods=['GET', 'POST'])
 def uploadUpdatedStory():
-    ''' Uploads existing story from updatestory.html to database '''
+    ''' Updates existing story in database with content from addcontent.html '''
     if 'currentuser' in session:                #checks if user is in session
         content = request.form['content']
         title = session['title']
@@ -236,17 +237,15 @@ def uploadUpdatedStory():
         query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
         c.execute(query)
         latest = c.fetchall()
-        updatedContent = latest[0][0] + content
+        updatedContent = latest[0][0] + " " + content
         query1 = "UPDATE stories SET latest = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
         c.execute(query1)
         #db.commit()
 
 #add to the list of stories that the user has worked on
-        titleList = (get_user_stories(session['currentuser']).append(title))
-        t = " "
-        t.join(titleList)
+
         query2 = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
-        c.execute(query2,titleList)
+        c.execute(query2, [title])
         db.commit()
 
         return render_template('home.html',user = session['currentuser'], status='Story successfully updated', user_stories = get_user_stories(session['currentuser']))
@@ -260,7 +259,7 @@ def viewStory():
     title = request.form['title']
 
     if title in userTitles:     #checks if user has contributed to requested story.
-        query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
+        query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
         c.execute(query)
         rows = c.fetchall()[0][0]
 

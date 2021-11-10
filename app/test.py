@@ -237,10 +237,10 @@ def uploadUpdatedStory():
         c.execute(query)
         latest = c.fetchall()
         updatedContent = latest[0][0] + content
-        query1 = "UPDATE stories SET latest = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
-        c.execute(query1)
-        #db.commit()
-
+        query = "UPDATE stories SET latest = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
+        c.execute(query)
+        db.commit()
+'''
 #add to the list of stories that the user has worked on
         titleList = (get_user_stories(session['currentuser']).append(title))
         t = " "
@@ -248,7 +248,7 @@ def uploadUpdatedStory():
         query2 = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
         c.execute(query2,titleList)
         db.commit()
-
+'''
         return render_template('home.html',user = session['currentuser'], status='Story successfully updated', user_stories = get_user_stories(session['currentuser']))
 
     return render_template('login.html', status = 'Please log in to create a new story.')

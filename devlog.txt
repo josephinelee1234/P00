@@ -108,3 +108,6 @@ Adding to a story is now recorded in user contributions. View story now shows la
 
 hanZ -- 2021-11-09 09:21
 Fixed view story to show all content instead of just latest. Made stories store latest update and show to user when adding to a new story.
+
+annabelZ -- 2021-11-10 9:25
+Fixed username not being displayed on /addToTitle  

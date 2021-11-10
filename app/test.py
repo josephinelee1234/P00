@@ -232,14 +232,21 @@ def uploadUpdatedStory():
 
         query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
         c.execute(query)
-        latest = c.fetchall()
-        updatedContent = latest[0][0] + " " + content
+        latest = c.fetchall()[0][0]
+        
+        query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
+        c.execute(query)
+        current = c.fetchall()
+        updatedContent = current[0][0] + " " + content
+
         query1 = "UPDATE stories SET content = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
-        query2 = "UPDATE stories SET latest = \'" + latest[0][0] + "\' WHERE title = \'" + title + '\''
         c.execute(query1)
-        c.execute(query2)
         db.commit()
 
+        query2 = "UPDATE stories SET latest = \'" + content + "\' WHERE title = \'" + title + '\''
+        c.execute(query2)
+        db.commit()
+        
         #add to the list of stories that the user has worked on
         query2 = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
         c.execute(query2, [title])

@@ -13,9 +13,9 @@
         <title> Add to Existing Story </title>
     </head>
 
-    <h4>
+    <h3>
         Submit your addition to this story.
-    </h4>
+    </h3>
 
     <form action="/uploadUpdatedStory" method = 'POST'>
         Content: <br>
@@ -24,7 +24,10 @@
         <button type = "submit"> Submit </button>
       </form>
     <br>
-    <h5> LATEST UPDATE TO {{title}} </h5>
+    <h4> LATEST UPDATE TO {{title}} </h4>
     {{content[0]}}
 
+    <form action="/auth" method = 'POST'>
+        <button type = "submit" formaction="/"> Home </button>
+    </form>
 </html>

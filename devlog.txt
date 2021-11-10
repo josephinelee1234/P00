@@ -102,3 +102,6 @@ Worked on adding content to story. Added content seems to be added, but story is
 
 annabelZ -- 2021-11-10 24:01
 Worked on properly recording stories a user has added to
+
+hebeH -- 2021-11-10 04:06
+Adding to a story is now successfully recorded in user contributions. View story now shows latest content instead of initial content

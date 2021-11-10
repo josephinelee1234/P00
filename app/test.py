@@ -170,7 +170,7 @@ def uploadNewStory():
     ''' Adds new story from createstory.html to database '''
     c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);") #creates table if one does not exist
     db.commit()     #saves changes
-
+    
     if 'currentuser' in session:                #checks if user is in session
         title = request.form['title']
         content = request.form['content']
@@ -195,17 +195,43 @@ def uploadNewStory():
 @app.route("/addToStory", methods=['GET','POST'])
 def updateStory():
     if 'currentuser' in session:
-        return render_template('updatestory.html', user = session['currentuser'])
+        query = 'SELECT title FROM stories'
+        c.execute(query)
+        rows = c.fetchall()
+        return render_template('updatestory.html', user = session['currentuser'],stories=rows)
 
     return render_template('login.html', status = 'Please log in to update a story.')
 
+
+@app.route("/addToTitle", methods=['GET', 'POST'])
+def addToTitle():
+    if 'title' in session:      
+        session.pop('title')
+
+    if 'currentuser' in session:
+        title = request.form['title']
+        titleList = getValue('title','stories')
+        if title in titleList:
+            if title in get_user_stories(session['currentuser']):
+                return render_template('home.html', status = 'You cannot add to stories you have already contributed to.', user_stories = get_user_stories(session['currentuser']))
+            else:
+                query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
+                c.execute(query)
+                rows = c.fetchall()
+                content = rows[0]
+                session['title'] = title
+                return render_template('addcontent.html',content = content, title = title)
+        else:
+            return render_template('home.html', status = 'Story does not exist.', user_stories = get_user_stories)
+    else:
+        return render_template('login.html', status = 'Please log in to update a story.')
 
 @app.route("/uploadUpdatedStory", methods=['GET', 'POST'])
 def uploadUpdatedStory():
     ''' Uploads existing story from updatestory.html to database '''
     if 'currentuser' in session:                #checks if user is in session
-        title = request.form['title']
         content = request.form['content']
+<<<<<<< HEAD
         #content = str(content)
 
         titleList = getValue("title", "stories")
@@ -220,18 +246,44 @@ def uploadUpdatedStory():
         else:
             return render_template('updatestory.html',user = session['currentuser'], status='Story not found', user_stories = get_user_stories(session['currentuser']))
         return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
+=======
+        title = session['title']
+
+        query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
+        c.execute(query)
+        latest = c.fetchall()
+        updatedContent = latest[0][0] + content
+        query = "UPDATE stories SET latest = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
+        c.execute(query)
+        db.commit()
+        return render_template('home.html',user = session['currentuser'], status='Story successfully updated', user_stories = get_user_stories(session['currentuser']))
+    
+>>>>>>> e949e598c3aa00037118db30eba511f67225aab2
     return render_template('login.html', status = 'Please log in to create a new story.')
 
 @app.route("/viewStory", methods=['GET','POST'])
 def viewStory():
     '''Returns latest story content'''
+    userTitles = get_user_stories(session['currentuser'])
     title = request.form['title']
+<<<<<<< HEAD
     query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
     c.execute(query)
     rows = c.fetchall()[0][0]
 
     return render_template('story.html',title = title, content = rows)
 
+=======
+    if title in userTitles:     #checks if user has contributed to requested story.
+        query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
+        c.execute(query)
+        rows = c.fetchall()[0][0]
+    
+        return render_template('story.html',title = title, content = rows)
+    else:
+        return render_template('home.html',status='You may only view stories you have contributed to.', user_stories=get_user_stories(session['currentuser']))
+    
+>>>>>>> e949e598c3aa00037118db30eba511f67225aab2
 
 
 if __name__ == "__main__": #false if this file imported as module

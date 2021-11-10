@@ -87,3 +87,15 @@ Added viewStory route, have some sqlite errors.
 
 hanZ -- 2021-11-08 09:47
 Fixed viewStory and added view story button
+
+hanZ -- 2021-11-09 08:57
+Made viewStory only work for stories the user has contributed to.
+
+hanZ -- 2021-11-09 09:21
+Worked on adding content to a story. User may now enter a story title to add to a story, if they haven't yet. Updating the actual content not implemented yet.
+
+josephineL -- 2021-11-09 09:25
+Added home buttons to pages the user accesses after logging in
+
+hanZ -- 2021-11-09 09:21
+Worked on adding content to story. Added content seems to be added, but story is not added to the user's contributions.

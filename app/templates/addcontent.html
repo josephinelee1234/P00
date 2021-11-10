@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<!--
+  Hot Cocoa - Hebe Huang, Josephine Lee, Annabel Zhang, Han Zhang
+  SoftDev
+  P00 -- Cafe of Stories
+  2021-10-27
+ -->
+
+
+<html>
+    <head>
+        <title> Add to Existing Story </title>
+    </head>
+
+    <h4>
+        Submit your addition to this story.
+    </h4>
+
+    <form action="/uploadUpdatedStory" method = 'POST'>
+        Content: <input type="text" name="content">
+        <br>
+        <button type = "submit"> Submit </button>
+      </form>
+    <br>
+    <h5> LATEST UPDATE TO {{title}} </h5>
+    {{content[0]}}
+
+</html>

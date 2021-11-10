@@ -164,6 +164,9 @@ def uploadNewStory():
         title = request.form['title']
         content = request.form['content']
 
+        if title:
+            return render_template('createstory.html', status="Please enter a story.", story=content)
+
         if title in getValue('title','stories'): # checks if story title has already been used
             return render_template('createstory.html', status="Duplicate story title- Please enter a different title.", story=content)
 
@@ -246,7 +249,7 @@ def uploadUpdatedStory():
         query2 = "UPDATE stories SET latest = \'" + content + "\' WHERE title = \'" + title + '\''
         c.execute(query2)
         db.commit()
-        
+
         #add to the list of stories that the user has worked on
         query2 = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
         c.execute(query2, [title])

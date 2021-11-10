@@ -233,7 +233,11 @@ def uploadUpdatedStory():
         query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
         c.execute(query)
         latest = c.fetchall()[0][0]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 81fd38ca897c05a9f799d7dda6b763d7ce4a4d7e
         query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
         c.execute(query)
         current = c.fetchall()
@@ -242,11 +246,18 @@ def uploadUpdatedStory():
         query1 = "UPDATE stories SET content = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
         c.execute(query1)
         db.commit()
+<<<<<<< HEAD
 
         query2 = "UPDATE stories SET latest = \'" + content + "\' WHERE title = \'" + title + '\''
         c.execute(query2)
         db.commit()
+=======
+>>>>>>> 81fd38ca897c05a9f799d7dda6b763d7ce4a4d7e
 
+        query2 = "UPDATE stories SET latest = \'" + content + "\' WHERE title = \'" + title + '\''
+        c.execute(query2)
+        db.commit()
+        
         #add to the list of stories that the user has worked on
         query2 = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
         c.execute(query2, [title])

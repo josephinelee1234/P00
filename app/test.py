@@ -164,7 +164,7 @@ def uploadNewStory():
         title = request.form['title']
         content = request.form['content']
 
-        if title:
+        if title == '':
             return render_template('createstory.html', status="Please enter a story.", story=content)
 
         if title in getValue('title','stories'): # checks if story title has already been used

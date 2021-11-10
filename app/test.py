@@ -23,11 +23,13 @@ c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)")
 c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);")
 db.commit()
 
+
 def randomString():
     ''' Generates a random string of 15 random characters'''
     chars = string.ascii_letters + string.digits + string.punctuation
     key = ''.join(random.choice(chars) for i in range(15))
     return key
+
 
 def getValue(value, table):
     ''' Gets all of a certain value from db table '''
@@ -39,11 +41,9 @@ def getValue(value, table):
         list.append(row[0])
     return list
 
+
 def checkLogin(user,passwd):
     ''' Checks inputted username and password to see if the user can log in for login.html '''
-    c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
-    db.commit()                   #saves changes
-
     userList = getValue('username','users')    #gets username from users table
     passList = getValue('password','users')    #gets passwords from users table
     if user in userList:                   #checks if inputted user is in database
@@ -52,9 +52,9 @@ def checkLogin(user,passwd):
             return True
     return False
 
+
 def createUser(user,passwd):
     ''' Creates a new user for login.html; helper method for signup() '''
-    c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)") #creates table if one does not exist
     query = 'INSERT INTO users VALUES(?,?)'
     c.execute(query,[user,passwd])
 
@@ -64,25 +64,14 @@ def createUser(user,passwd):
 
 
 def get_user_stories(user):
-    ''' Returns all stories the user contributed to, formatted for home.html'''
-    s = ""
+    ''' Returns titles of all stories the user contributed to'''
     titles = getValue("title", user)
-    storiesdb = getValue("title", "stories")
-    i = 0
     return titles
-    while i < len(titles):
-        s += "story " + str(i) + " title: " + titles[i] + " <br> "
-        # query = "SELECT latest FROM stories WHERE title = " + titles[i]
-        # story = c.fetchall() # fetches latest version of the story from the stories db
-        # for s in story:
-        #     s += s
-        i += 1
-    return s
-
 
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = randomString()   #set flask session secret key
+
 
 @app.route("/", methods=['GET', 'POST'])
 def disp_signup_page():
@@ -92,6 +81,7 @@ def disp_signup_page():
         #This should return home page
 
     return render_template( 'login.html' )
+
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -121,6 +111,7 @@ def signup():
             createUser(user,pas)    #adds user to database
             return render_template('login.html', status = 'Account successfully created. You may now login.')
 
+
 @app.route("/auth", methods=['GET', 'POST'])
 def authenticate():
     ''' Checks user login '''
@@ -146,6 +137,7 @@ def authenticate():
         else:
             return render_template('login.html', status = 'Invalid username or password')
 
+
 @app.route("/logout")
 def logout():
     ''' Logs user out through logout button '''
@@ -156,28 +148,24 @@ def logout():
 
 @app.route("/createstory", methods=['GET', 'POST'])
 def createNewStory():
-    ''' Takes user to a page to input new story info '''
-    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);") #creates table if one does not exist
-    db.commit()     #saves changes
-
+    ''' From home.html
+    Sends user to createstory.html '''
     if 'currentuser' in session:
         return render_template('createstory.html', user = session['currentuser'])
 
     return render_template('login.html', status = 'Please log in to create a new story.')
 
+
 @app.route("/uploadNewStory", methods=['GET', 'POST'])
 def uploadNewStory():
-    ''' Adds new story from createstory.html to database '''
-    c.execute("CREATE TABLE IF NOT EXISTS stories(title TEXT, content TEXT, latest TEXT, lastuser TEXT);") #creates table if one does not exist
-    db.commit()     #saves changes
-
+    ''' Adds new story from createstory.html to database;
+    Goes back to home.html '''
     if 'currentuser' in session:                #checks if user is in session
         title = request.form['title']
         content = request.form['content']
 
-        '''checks if story title has already been used'''
-        if title in getValue('title','stories'):
-            return render_template('createstory.html', status="Duplicate story title- Please enter a different title.")
+        if title in getValue('title','stories'): # checks if story title has already been used
+            return render_template('createstory.html', status="Duplicate story title- Please enter a different title.", story=content)
 
         else:
             query = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
@@ -192,8 +180,11 @@ def uploadNewStory():
     else:
         return render_template('login.html', status = 'Please log in to create a new story.')
 
+
 @app.route("/addToStory", methods=['GET','POST'])
 def updateStory():
+    ''' From home.html
+    Sends user to updatestory.html '''
     if 'currentuser' in session:
         query = 'SELECT title FROM stories'
         c.execute(query)
@@ -205,7 +196,9 @@ def updateStory():
 
 @app.route("/addToTitle", methods=['GET', 'POST'])
 def addToTitle():
-    ''' Takes in title of a story and determines whether or not user can add to the story '''
+    ''' From updatestory.html:
+    Takes in title of a story and determines whether or not user can add to the story; 
+    Goes to addcontent.html '''
     if 'title' in session:
         session.pop('title')
 
@@ -223,13 +216,16 @@ def addToTitle():
                 session['title'] = title
                 return render_template('addcontent.html',content = content, title = title)
         else:
-            return render_template('home.html', status = 'Story does not exist.', user_stories = get_user_stories)
+            return render_template('home.html', status = 'Story does not exist.', user_stories = getValue("title", session['currentuser']))
     else:
         return render_template('login.html', status = 'Please log in to update a story.')
 
+
 @app.route("/uploadUpdatedStory", methods=['GET', 'POST'])
 def uploadUpdatedStory():
-    ''' Updates existing story in database with content from addcontent.html '''
+    ''' From addcontent.html: 
+    Updates existing story in database with content from addcontent.html;
+    Goes back to home.html '''
     if 'currentuser' in session:                #checks if user is in session
         content = request.form['content']
         title = session['title']
@@ -240,21 +236,21 @@ def uploadUpdatedStory():
         updatedContent = latest[0][0] + " " + content
         query1 = "UPDATE stories SET latest = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
         c.execute(query1)
-        #db.commit()
 
-#add to the list of stories that the user has worked on
-
+        #add to the list of stories that the user has worked on
         query2 = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
         c.execute(query2, [title])
         db.commit()
-
         return render_template('home.html',user = session['currentuser'], status='Story successfully updated', user_stories = get_user_stories(session['currentuser']))
 
     return render_template('login.html', status = 'Please log in to create a new story.')
 
+
 @app.route("/viewStory", methods=['GET','POST'])
 def viewStory():
-    '''Returns latest story content'''
+    ''' From home.html: 
+    Returns latest story content
+    Goes to story.html '''
     userTitles = get_user_stories(session['currentuser'])
     title = request.form['title']
 

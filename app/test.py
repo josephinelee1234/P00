@@ -206,13 +206,15 @@ def uploadUpdatedStory():
     if 'currentuser' in session:                #checks if user is in session
         title = request.form['title']
         content = request.form['content']
-        titleList = getValue(title, "stories")
+        #content = str(content)
+
+        titleList = getValue("title", "stories")
         contentList = getValue("latest", "stories")
         if title in titleList:
             i = titleList.index(title)
-            updatedContent = contentList[i]
+            updatedContent = str(contentList[i])
             updatedContent += content
-            query = "UPDATE stories SET latest = " + updatedContent + " WHERE title = " + title
+            query = "UPDATE stories SET latest =" + updatedContent + " WHERE title = " + title
             c.execute(query)
             return render_template('home.html',user = session['currentuser'], status='Story successfully created', user_stories = get_user_stories(session['currentuser']))
         else:
@@ -227,9 +229,9 @@ def viewStory():
     query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
     c.execute(query)
     rows = c.fetchall()[0][0]
-    
+
     return render_template('story.html',title = title, content = rows)
-    
+
 
 
 if __name__ == "__main__": #false if this file imported as module

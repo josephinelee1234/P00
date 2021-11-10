@@ -232,10 +232,20 @@ def uploadUpdatedStory():
 
         query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
         c.execute(query)
-        latest = c.fetchall()
-        updatedContent = latest[0][0] + " " + content
-        query1 = "UPDATE stories SET latest = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
+        latest = c.fetchall()[0][0]
+
+        query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
+        c.execute(query)
+        current = c.fetchall()
+        updatedContent = current[0][0] + " " + content
+
+        query1 = "UPDATE stories SET content = \'" + updatedContent + "\' WHERE title = \'" + title + '\''
         c.execute(query1)
+        db.commit()
+
+        query2 = "UPDATE stories SET latest = \'" + content + "\' WHERE title = \'" + title + '\''
+        c.execute(query2)
+        db.commit()
 
         #add to the list of stories that the user has worked on
         query2 = 'INSERT INTO ' + session['currentuser'] + ' VALUES(?)'
@@ -255,7 +265,7 @@ def viewStory():
     title = request.form['title']
 
     if title in userTitles:     #checks if user has contributed to requested story.
-        query = 'SELECT latest FROM stories WHERE title = \'' + title + '\''
+        query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
         c.execute(query)
         rows = c.fetchall()[0][0]
 

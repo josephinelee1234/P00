@@ -104,4 +104,4 @@ annabelZ -- 2021-11-10 24:01
 Worked on properly recording stories a user has added to
 
 hebeH -- 2021-11-10 04:06
-Adding to a story is now successfully recorded in user contributions. View story now shows latest content instead of initial content
+Adding to a story is now recorded in user contributions. View story now shows latest content instead of initial content. Fixed bug in story does not exist. Saves story in progress after entering a bad title. Cleaned code. Currently the stories db stores initial update of a story but needs to store latest update instead

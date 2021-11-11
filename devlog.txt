@@ -116,4 +116,4 @@ hanZ -- 2021-11-11 13:42
 Added try except blocks. Fixed error where username was not shown on home.html
 
 josephineL -- 2021-11-11 16:00
-Updated design document and site map to reflect changes: additional page created for adding to an existing story, form on home page to view user's stories.
+Updated design document and site map to reflect changes: additional page created for adding to an existing story, form on home page to view user's stories. Updated README.md to make instructions more clear.

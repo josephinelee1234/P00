@@ -117,3 +117,6 @@ Added try except blocks. Fixed error where username was not shown on home.html
 
 josephineL -- 2021-11-11 16:00
 Updated design document and site map to reflect changes: additional page created for adding to an existing story, form on home page to view user's stories. Updated README.md to make instructions more clear.
+
+hebeH -- 2021-11-11 18:33
+Updated Program Components and Database Organization parts of design doc. Login now tells user to start usernames with a letter, sends warning if it doesn't. Viewstory now shows last user that updated the story.

@@ -106,8 +106,11 @@ Worked on properly recording stories a user has added to
 hebeH -- 2021-11-10 04:06
 Adding to a story is now recorded in user contributions. View story now shows latest content instead of initial content. Fixed bug in story does not exist. Saves story in progress after entering a bad title. Cleaned code. Currently the stories db stores initial update of a story but needs to store latest update instead
 
-hanZ -- 2021-11-09 09:21
+hanZ -- 2021-11-10 09:21
 Fixed view story to show all content instead of just latest. Made stories store latest update and show to user when adding to a new story.
 
 annabelZ -- 2021-11-10 9:25
 Fixed username not being displayed on /addToTitle  
+
+hanZ -- 2021-11-11 13:42
+Added try except blocks. Fixed eror where username was not shown on home.html

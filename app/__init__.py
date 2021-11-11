@@ -92,7 +92,8 @@ def signup():
     if request.method == 'POST': #conditional for 'POST' method or 'GET' method
         user = request.form['username']
         pas = request.form['password']
-
+        if not(user[0].isalpha()):
+            return render_template('login.html', status = 'Username must begin with a letter')
         if user in getValue('username','users'):    #checks if user input is in database
             return render_template('login.html', status = 'Username already in use.')
         else:
@@ -104,7 +105,8 @@ def signup():
     else:
         user = request.args['username']
         pas = request.args['password']
-
+        if not(user[0].isalpha()):
+            return render_template('login.html', status = 'Username must begin with a letter')
         if user in getValue('username','user'):     #checks if user input is in database
             return render_template('login.html', status = 'Username already in use.')
         else:
@@ -257,9 +259,12 @@ def uploadUpdatedStory():
             c.execute(query1)
             db.commit()
 
-
             query2 = "UPDATE stories SET latest = \'" + content + "\' WHERE title = \'" + title + '\''
             c.execute(query2)
+            db.commit()
+
+            query3 = "UPDATE stories SET lastuser = \'" + session['currentuser'] + "\' WHERE title = \'" + title + '\''
+            c.execute(query3)
             db.commit()
 
             #add to the list of stories that the user has worked on
@@ -287,12 +292,14 @@ def viewStory():
                 query = 'SELECT content FROM stories WHERE title = \'' + title + '\''
                 c.execute(query)
                 rows = c.fetchall()[0][0]
-
-                return render_template('story.html',title = title, content = rows)
+                query = 'SELECT lastuser FROM stories WHERE title = \'' + title + '\''
+                c.execute(query)
+                lastuser = c.fetchall()[0][0]
+                return render_template('story.html', title = title, content = rows, lastuser = lastuser)
             else:
-                return render_template('home.html',user = session['currentuser'], status='You may only view stories you have contributed to.', user_stories=get_user_stories(session['currentuser']))
+                return render_template('home.html', user = session['currentuser'], status='You may only view stories you have contributed to.', user_stories=get_user_stories(session['currentuser']))
         except:
-            return render_template('home.html',user = session['currentuser'], status='ERROR', user_stories=get_user_stories(session['currentuser']))
+            return render_template('home.html', user = session['currentuser'], status='ERROR', user_stories=get_user_stories(session['currentuser']))
 
     else:
         return render_template('login.html', status = 'Please log in to view a new story.')

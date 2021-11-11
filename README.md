@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 ### 4. Navigate to the directory and run:
 ```
-cd P00
+cd P00/app
 python3 app.py
 ```
 

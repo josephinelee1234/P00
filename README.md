@@ -13,15 +13,15 @@ Hebe Huang: Database generation
 
 ### 1. Clone the repository in terminal:
 ```
-git clone <ssh link>
+git clone git@github.com:josephinelee1234/P00.git
 ```
 
 ### 2. Create and activate a virtual enviroment:
 ```
-python3 -m venv ~/virtualenvname
+python3 -m venv ~/<virtualenvname>
 
-source ~/virtualenvname/bin/activate (for Linux)
-source ~/virtualenvname/Scripts/activate (for Windows)
+source ~/<virtualenvname>/bin/activate (for Linux)
+source ~/<virtualenvname>/Scripts/activate (for Windows)
 ```
 
 ### 3. Install dependencies:

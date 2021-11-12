@@ -1,6 +1,6 @@
 # Cafe of Stories by Team Hot Cocoa
 
-Our project is a collaborative story-telling website where users can log in and add to as well as create different stories. 
+Our project is a collaborative story-telling website where users can log in to create and add onto different stories. When adding to a story, users can only see the latest update, but after contributing, users can view the full story through their home page.
 
 __Roles:__  
 Josephine Lee: Project Manager; HTML templates, front end  

@@ -18,21 +18,21 @@ $ git clone git@github.com:josephinelee1234/P00.git
 
 ### 2. Create and activate a virtual enviroment:
 ```
-$ python3 -m venv ~/<virtualenvname>
+$ python3 -m venv ~/marshmallows
 
-$ source ~/<virtualenvname>/bin/activate (for Linux)
-$ source ~/<virtualenvname>/Scripts/activate (for Windows)
+$ source ~/marshmallows/bin/activate (for Linux)
+$ source ~/marshmallows/Scripts/activate (for Windows)
 ```
 
 ### 3. Install dependencies:
 ```
-(<virtualenvname>)$ pip install -r requirements.txt  
+(marshmallows)$ pip install -r requirements.txt  
 ```
 
 ### 4. Navigate to the directory and run:
 ```
-(<virtualenvname>)$ cd <PathToP00>/app
-(<virtualenvname>)$ python3 app.py
+(marshmallows)$ cd P00/app
+(marshmallows)$ python3 app.py
 ```
 
-### 5. Open up the url given by the terminal
+### 5. Open up the url given by the terminal: [http://127.0.0.1:5000/auth]

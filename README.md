@@ -35,4 +35,4 @@ $ source ~/marshmallows/Scripts/activate (for Windows)
 (marshmallows)$ python3 app.py
 ```
 
-### 5. Open up the url given by the terminal: [http://127.0.0.1:5000/auth]
+### 5. Open up the url given by the terminal: [http://127.0.0.1:5000/]

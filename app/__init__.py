@@ -92,16 +92,18 @@ def signup():
     if request.method == 'POST': #conditional for 'POST' method or 'GET' method
         user = request.form['username']
         pas = request.form['password']
+        if user == "" or pas == "":
+            return render_template('login.html', status = 'Please fill in all fields')
+        for let in user:
+            if let == " ":
+                return render_template('login.html', status = 'No spaces allowed.')
         if not(user[0].isalpha()):
             return render_template('login.html', status = 'Username must begin with a letter')
         if user in getValue('username','users'):    #checks if user input is in database
             return render_template('login.html', status = 'Username already in use.')
-        else:
-            if user != "":
-                createUser(user,pas)    #adds user to database
-                return render_template('login.html', status = 'Account successfully created. You may now login.')
-            else:
-                return render_template('login.html', status = 'No spaces allowed.')
+        createUser(user,pas)    #adds user to database
+        return render_template('login.html', status = 'Account successfully created. You may now login.')
+        
     else:
         user = request.args['username']
         pas = request.args['password']

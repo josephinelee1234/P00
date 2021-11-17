@@ -32,7 +32,7 @@ $ source ~/marshmallows/Scripts/activate (for Windows)
 ### 4. Navigate to the directory and run:
 ```
 (marshmallows)$ cd P00/app
-(marshmallows)$ python3 __intit__.py
+(marshmallows)$ python3 __init__.py
 ```
 
 ### 5. Open up the url given by the terminal: [http://127.0.0.1:5000/]
